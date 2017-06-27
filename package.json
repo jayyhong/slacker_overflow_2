@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/slack-overflow/slack-overflow.git"
+    "url": "https://github.com/SlackersOverflow/slacker_overflow_2.git"
   },
   "author": "slack-overflow team: Josh Bahr, Inseok Seo, Jason Shao",
   "license": "ISC",
