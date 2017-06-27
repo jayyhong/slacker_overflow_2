@@ -1,0 +1,22 @@
+<profile-page></profile-page>
+<div class="container">
+  <div class="table-responsive">          
+    <table class="table marginTop">
+      <thead>
+        <tr>
+          <th>Questions Asked By Others:</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="question in ctrl.questionsList | orderBy: '-id'">
+          <td><a ui-sref="questionAskedEntry({id: question.id})">
+          <h3>{{question.title}}<h3></a>
+          <h5>Field: {{question.field}}<h5>
+          <h5>Asked By: {{question.name}}</h5>
+        </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
