@@ -4,7 +4,7 @@
     .module('slackOverflowApp')
     .service('chatService', ['$rootScope', function($rootScope) {
       const vm = this;
-      vm.socket = window.io('localhost:3456/');
+      vm.socket = window.io('https://hidden-dusk-94684.herokuapp.com');
       vm.users = [];
       vm.email;
       vm.messages = {};
