@@ -11,7 +11,7 @@ const port = 3456;
 
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')('https://hidden-dusk-94684.herokuapp.com');
+const io = require('socket.io')(server);
 
 app.use(bodyParser.json());
 app.use(morgan('dev'));
