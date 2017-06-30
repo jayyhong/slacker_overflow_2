@@ -5,10 +5,27 @@
     .service('chatService', ['$rootScope', function($rootScope) {
       const vm = this;
       vm.socket = window.io('https://morning-lowlands-81835.herokuapp.com');
+      // vm.socket = window.io('http://localhost:3456/')
       vm.users = [];
       vm.email;
       vm.messages = {};
       
+      vm.editor={};
+      vm.e = null;
+
+      vm.codeToServer = (editObj) =>{
+        console.log("in codeToServer", editObj);
+        vm.socket.emit('updateEditor', editObj);
+      }
+      vm.setEditor = (editor) => {
+        vm.editor = editor;
+      };
+      vm.socket.on('updateEditor', function(editObj){
+        console.log('from server: ' + editObj);
+        editObj = JSON.parse(editObj);
+        vm.editor.lastAppliedChange = editObj;
+        vm.editor.getSession().getDocument().applyDeltas([editObj]);
+      });
 
 
       vm.joinChatServer = (email) => {
@@ -42,20 +59,20 @@
         vm.socket.emit('newMessage', messageBody);
       }
 
-      // vm.updateUsers = () => {
-      //   vm.socket.on('users', function(data) {
-      //     if (vm.users.length === 0) {
-      //       vm.users.push(data[0]);
-      //     }
-      //     for (var i = 0; i < data.length; i++) {
-      //       for (var j = 0; j < vm.users.length; j++) {
-      //         if (data[i] !== vm.users[j]) {
-      //           vm.users.push(data[i]);
-      //         }
-      //       }
-      //     }
-      //   });
-      // };
+      vm.updateUsers = () => {
+        vm.socket.on('users', function(data) {
+          if (vm.users.length === 0) {
+            vm.users.push(data[0]);
+          }
+          for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < vm.users.length; j++) {
+              if (data[i] !== vm.users[j]) {
+                vm.users.push(data[i]);
+              }
+            }
+          }
+        });
+      };
 
 ////////////////////////////////////////////////////////////////////////////////////
 

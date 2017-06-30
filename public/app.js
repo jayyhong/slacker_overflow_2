@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular
-    .module('slackOverflowApp', ['auth0', 'angular-storage', 'angular-jwt', 'ngMaterial', 'ui.router'])
+    .module('slackOverflowApp', ['ui.ace', 'auth0', 'angular-storage', 'angular-jwt', 'ngMaterial', 'ui.router'])
     .run(function($rootScope, auth, store, jwtHelper, $location) {
 
       $rootScope.$on('$locationChangeStart', function() {

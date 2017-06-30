@@ -12,6 +12,23 @@
     vm.newMessageBody = undefined;
     vm.email = store.get('profile').email;
     vm.messages = chatService.messages[vm.email];
+    
+    vm.editor = null;
+    vm.e = null;
+    //user change get"e"
+    $scope.aceChanged = function(e){
+      vm.e = e;
+      console.log(e);
+    }
+    $scope.userInput = function(){
+      console.log(vm.e);
+      const edit = JSON.stringify(vm.e[0]);
+      chatService.codeToServer(edit);
+    }
+    $scope.aceLoaded = function(_editor){
+      chatService.setEditor(_editor);
+      vm.editor = _editor;
+    }
 
     vm.videoChat = function() {
       window.open(location + '/webRTC')

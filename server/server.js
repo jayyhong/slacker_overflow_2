@@ -24,6 +24,11 @@ const users = {};
 io.on('connection', function(socket) {
   console.log('CHAT SERVER CONNECTION SUCCESSFUL');
 
+  socket.on('updateEditor', function(edit){
+    console.log("in updateEditor", edit)  
+    socket.broadcast.emit('updateEditor', edit);
+  });
+
   socket.on('join', function(email, callback) {
     console.log('USER JOINED, email: ', email);
     socket.email = email;

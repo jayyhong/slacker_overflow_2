@@ -57,6 +57,13 @@
         <!--<button id="hangupButton">Hang Up</button>-->
       </div>
 
+<div>
+<img src="http://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu">
+  <BR><h3>
+  Wallet Address: </h3> <h4>n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu<h4><br>
+  <div id='websocket'>Monitoring...</div>
+  </div>
+
   <md-content> 
   <span>beta v0.0.01</span>
     <ui>
@@ -64,9 +71,20 @@
       <strong>{{message.from}}: </strong> <span> {{message.message}} </span>
     </li>
   </ui>
-
-
   </md-content>
+
+  <section>
+  <div ui-ace="{
+    useWrapMode : true,
+    showGutter: true,
+    theme:'twilight',
+    mode: 'xml',
+    firstLineNumber: 1,
+    onLoad: aceLoaded,
+    onChange: aceChanged
+  }"
+    ng-keyUp="userInput()" style="height:200px" ng-model="aceModel"></div>
+  </section>
   
   <input ng-model="ctrl.newMessage" type="text"> <button ng-click="ctrl.sendMessage()">send</button>
   <!--<button
