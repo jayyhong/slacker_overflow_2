@@ -13,7 +13,7 @@
       vm.auth = auth;
       // vm.registerUser = authService.registerUser;
       vm.openWindow = function(){
-        window.open('http://localhost:3456/#!/chatPage/webRTC', '_blank', 'width: 100px, height: 100px')
+        window.open('http://localhost:3456/#!/chatPage', '_blank', 'width: 100px, height: 100px')
       }
 
       function redirectHome() {
