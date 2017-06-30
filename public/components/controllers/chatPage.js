@@ -79,7 +79,7 @@ var turnReady;
 
 var pcConfig = {
   'iceServers': [{
-    'urls': 'stun:stun.l.google.com:19302'
+    'url': 'stun:stun.l.google.com:19302'
   }]
 };
 
@@ -128,13 +128,13 @@ socket.on('log', function(array) {
 
 ////////////////////////////////////////////////
 
-function sendMessage(message) {
+const sendMessage = (message) => {
   console.log('Client sending message: ', message);
   socket.emit('message', message);
 }
 
 // This client receives a message
-socket.on('message', function(message) {
+socket.on('message', (message) => {
   console.log('Client received message:', message);
   if (message === 'got user media') {
     maybeStart();
@@ -142,8 +142,10 @@ socket.on('message', function(message) {
     if (!isInitiator && !isStarted) {
       maybeStart();
     }
-    pc.setRemoteDescription(new RTCSessionDescription(message));
-    doAnswer();
+    pc.setRemoteDescription(new RTCSessionDescription(message))
+      .then(()=> {
+        doAnswer();
+      })
   } else if (message.type === 'answer' && isStarted) {
     pc.setRemoteDescription(new RTCSessionDescription(message));
   } else if (message.type === 'candidate' && isStarted) {
@@ -164,11 +166,8 @@ var showVideo = true;
 // var hangupButton = document.getElementById('hangupButton')
 // hangupButton.onclick = hangup;
 
-// this.start = function(){
-//   console.log(remoteStream.getVideoTracks()[0])
-// }
-
-this.start = function() {
+this.start = () => {
+  console.log('yessssssssssssssssssss', pc)
   this.showVideo = false;
 navigator.mediaDevices.getUserMedia({
   audio: false,
@@ -180,13 +179,13 @@ navigator.mediaDevices.getUserMedia({
 });
 }
 
-this.stop=function(){
+this.stop= () =>{
   this.showVideo = true;
   localStream.getVideoTracks()[0].stop()
   remoteStream.getVideoTracks()[0].stop()
 }
 
-function gotStream(stream) {
+const gotStream = (stream) => {
   console.log('Adding local stream.');
   localVideo.src = window.URL.createObjectURL(stream);
   localStream = window.localStream = stream;
@@ -213,7 +212,7 @@ if (location.hostname !== 'localhost') {
   );
 }
 
-function maybeStart() {
+const maybeStart =() => {
   console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
   if (!isStarted && typeof localStream !== 'undefined' && isChannelReady) {
     console.log('>>>>>> creating peer connection');
@@ -233,7 +232,7 @@ window.onbeforeunload = function() {
 
 /////////////////////////////////////////////////////////
 
-function createPeerConnection() {
+const createPeerConnection = () => {
   try {
     pc = new RTCPeerConnection(null);
     pc.onicecandidate = handleIceCandidate;
@@ -247,7 +246,7 @@ function createPeerConnection() {
   }
 }
 
-function handleIceCandidate(event) {
+const handleIceCandidate = (event) => {
   console.log('icecandidate event: ', event);
   if (event.candidate) {
     sendMessage({
@@ -267,16 +266,16 @@ function handleRemoteStreamAdded(event) {
   remoteStream = event.stream;
 }
 
-function handleCreateOfferError(event) {
+const handleCreateOfferError=(event) => {
   console.log('createOffer() error: ', event);
 }
 
-function doCall() {
+const doCall = () => {
   console.log('Sending offer to peer');
   pc.createOffer(setLocalAndSendMessage, handleCreateOfferError);
 }
 
-function doAnswer() {
+const doAnswer = () => {
   console.log('Sending answer to peer.');
   pc.createAnswer().then(
     setLocalAndSendMessage,
@@ -284,7 +283,7 @@ function doAnswer() {
   );
 }
 
-function setLocalAndSendMessage(sessionDescription) {
+const setLocalAndSendMessage = (sessionDescription) => {
   // Set Opus as the preferred codec in SDP if Opus is present.
   //  sessionDescription.sdp = preferOpus(sessionDescription.sdp);
   pc.setLocalDescription(sessionDescription);
@@ -292,11 +291,11 @@ function setLocalAndSendMessage(sessionDescription) {
   sendMessage(sessionDescription);
 }
 
-function onCreateSessionDescriptionError(error) {
+const onCreateSessionDescriptionError = (error) => {
   trace('Failed to create session description: ' + error.toString());
 }
 
-function requestTurn(turnURL) {
+const requestTurn = (turnURL) => {
   var turnExists = false;
   for (var i = 0; i < pcConfig.iceServers.length; i++) {
     console.log('ice servers ----------', JSON.stringify(pcConfig.iceServers))
@@ -330,29 +329,29 @@ function requestTurn(turnURL) {
   }
 }
 
-function handleRemoteStreamAdded(event) {
+handleRemoteStreamAdded=(event)=> {
   console.log('Remote stream added.');
   remoteVideo.src = window.URL.createObjectURL(event.stream);
   remoteStream = event.stream;
 }
 
-function handleRemoteStreamRemoved(event) {
+const handleRemoteStreamRemoved = (event) => {
   console.log('Remote stream removed. Event: ', event);
 }
 
-function hangup() {
+const hangup=() => {
   console.log('Hanging up.');
   stop();
   sendMessage('bye');
 }
 
-function handleRemoteHangup() {
+const handleRemoteHangup=() => {
   console.log('Session terminated.');
   stop();
   isInitiator = false;
 }
 
-function stop() {
+const stop=() => {
   isStarted = false;
   // isAudioMuted = false;
   // isVideoMuted = false;
