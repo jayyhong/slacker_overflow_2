@@ -160,14 +160,16 @@ socket.on('message', function(message) {
 ////////////////////////////////////////////////////
 var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
+var showVideo = true;
 // var hangupButton = document.getElementById('hangupButton')
-this.showVideo = false;
 // hangupButton.onclick = hangup;
 
 // this.start = function(){
 //   console.log(remoteStream.getVideoTracks()[0])
 // }
 
+this.start = function() {
+  this.showVideo = false;
 navigator.mediaDevices.getUserMedia({
   audio: false,
   video: true
@@ -176,7 +178,7 @@ navigator.mediaDevices.getUserMedia({
 .catch(function(e) {
   alert('getUserMedia() error: ' + e.name);
 });
-
+}
 
 this.stop=function(){
   this.showVideo = true;

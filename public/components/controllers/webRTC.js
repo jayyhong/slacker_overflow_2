@@ -141,6 +141,7 @@ hangupButton.onclick = hangup;
 //   console.log(remoteStream.getVideoTracks()[0])
 // }
 
+this.start = function(){
 navigator.mediaDevices.getUserMedia({
   audio: false,
   video: true
@@ -149,13 +150,14 @@ navigator.mediaDevices.getUserMedia({
 .catch(function(e) {
   alert('getUserMedia() error: ' + e.name);
 });
+}
 
 
-// this.stop=function(){
-//   this.showVideo = true;
-//   localStream.getVideoTracks()[0].stop()
-//   remoteStream.getVideoTracks()[0].stop()
-// }
+this.stop=function(){
+  this.showVideo = true;
+  localStream.getVideoTracks()[0].stop()
+  remoteStream.getVideoTracks()[0].stop()
+}
 
 function gotStream(stream) {
   console.log('Adding local stream.');
