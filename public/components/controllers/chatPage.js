@@ -301,7 +301,8 @@ function requestTurn(turnURL) {
   for (var i = 0; i < pcConfig.iceServers.length; i++) {
     console.log('ice servers ----------', JSON.stringify(pcConfig.iceServers))
     console.log('pcConfig +++++++', JSON.stringify(pcConfig))
-    console.log('==============', pcConfig.iceServers[i].url)
+    console.log('==============', pcConfig.iceServers[0].url)
+    console.log('=====substr', pcConfig.iceServers[0].url.substr(0,5))
     if (pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
       turnExists = true;
       turnReady = true;
