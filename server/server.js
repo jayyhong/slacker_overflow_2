@@ -104,6 +104,6 @@ io.on('connection', function(socket) {
 
 init()
   .then(() => {
-    server.listen(port, () => console.log(`app is listening on port ${port}`));
+    server.listen(process.env.PORT || port, () => console.log(`app is listening on port ${port}`));
   })
   .catch(err => console.error('unable to connect to database ', err));
