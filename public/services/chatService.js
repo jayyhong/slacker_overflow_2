@@ -57,7 +57,30 @@
       //   });
       // };
 
+////////////////////////////////////////////////////////////////////////////////////
 
+ let ws = new WebSocket("wss://socket.blockcypher.com/v1/btc/test3");
+
+  ws.onopen = function(event) {
+    ws.send(JSON.stringify({event: "tx-confirmation", address: "n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu"}));
+  }
+
+  ws.onmessage = function (event) {
+    console.log('this si the events.data', event.data);
+    let tx = JSON.parse(event.data);
+    console.log('this is the tx', tx);
+    let getOuts = tx.outputs;
+    let addrs = 'n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu';
+    for (let i = 0; i < getOuts.length; i++) {
+      let outAdd = tx.outputs[i];
+        if(outAdd.addresses[0] === addrs) {
+        let amount = outAdd.value;
+        // console.log('this is the amoutn', amount);
+        let total = amount / 100000000;
+        document.getElementById('websocket').innerHTML = "<pre>" + '<h3>' + 'Latest Donation Received: ' +  + total + ' BTC' + '\n\n' + 'Transaction Hash: ' + tx.hash + '</h3>' + "<pre>";
+      }
+    }
+}
 
     }])
 })(window, window.angular);
