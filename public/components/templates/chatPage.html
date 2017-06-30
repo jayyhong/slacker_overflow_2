@@ -62,6 +62,15 @@
   </md-content>
   
   <input ng-model="ctrl.newMessage" type="text"> <button ng-click="ctrl.sendMessage()">send</button>
-
+  <!--<button
+        aria-label="Video"
+        ng-click='ctrl.videoChat()'
+        >
+        VideoChat
+      </button>-->
+      <div id="videoPlayer">
+        <video style="height: 150px; position: absolute" id="localVideo" autoplay ng-hide='ctrl.showVideo'></video>
+        <video id="remoteVideo" autoplay></video>
+      </div>
 
 </div>

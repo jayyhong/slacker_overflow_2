@@ -1,71 +1,44 @@
 (function() {
-  'use strict';
   angular
   .module('slackOverflowApp')
+  .controller('webRTCController',
+    function(){
 
-  .controller('chatPageController', ['store', '$scope', '$timeout', '$mdSidenav', 'chatService', '$rootScope', function (store, $scope, $timeout, $mdSidenav, chatService, $rootScope) {
-    $scope.toggleLeft = buildToggler('left');
-    $scope.toggleRight = buildToggler('right');
-    const vm = this;
-    vm.users = chatService.users;
-    vm.newMessage = undefined;
-    vm.newMessageBody = undefined;
-    vm.email = store.get('profile').email;
-    vm.messages = chatService.messages[vm.email];
+// 'use strict';
 
-    vm.videoChat = function() {
-      window.open(location + '/webRTC')
-    }
+// var isInitiator;
 
-    vm.sendMessage = function() {
-      console.log('THE MESSAGE: ', vm.newMessage, ' IS BEING SENT TO: ', vm.clickedUser);
-      vm.newMessageBody = {email: vm.clickedUser, message: vm.newMessage}
-      console.log('THIS IS MESSAGE BODY BEING SENT: ', vm.newMessageBody);
-      chatService.sendMessage(vm.newMessageBody)
-      vm.newMessage = '';
-    };
+// window.room = prompt("Enter room name:");
 
-    vm.clickedUser;
-    vm.clickUser = function(user) {
-      console.log('CLICKED USER: ', user);
-      vm.clickedUser = user;
-      console.log('VM.CLICKEDUSER: ', vm.clickedUser);
-      $scope.toggleLeft();
-    };
+// var socket = io.connect();
 
-    $rootScope.$on(vm.email, function(event, messageBody) {
-      console.log('(chatPage) Receiving Message, messageBody: ', messageBody);
-      $scope.$apply(function() {
-        console.log('(chatPage) updating vm.messages: ', vm.messages);
-        vm.messages = chatService.messages[vm.email];
-        console.log('(chatPage) updated vm.messages: ', vm.messages)
-      })
-    });
-    $rootScope.$on('updateUsers', function(event, users) {
-      console.log('(chatPage) Received userinformation: ', users);
-      $scope.$apply(function() {
-        vm.users = users;
-      });
-    })
+// if (room !== "") {
+//   console.log('Message from client: Asking to join room ' + room);
+//   socket.emit('create or join', room);
+// }
 
-    // $scope.$watch(function() {
-    //   return vm.users;
-    // }, function() {
-    //   if (vm.users) {
-    //     console.log('This is vm.users on WATCH', vm.users);
-    //   }
-    // });
+// socket.on('created', function(room, clientId) {
+//   isInitiator = true;
+// });
+
+// socket.on('full', function(room) {
+//   console.log('Message from client: Room ' + room + ' is full :^(');
+// });
+
+// socket.on('ipaddr', function(ipaddr) {
+//   console.log('Message from client: Server IP address is ' + ipaddr);
+// });
+
+// socket.on('joined', function(room, clientId) {
+//   isInitiator = false;
+// });
+
+// socket.on('log', function(array) {
+//   console.log.apply(console, array);
+// });
 
 
-
-    function buildToggler(componentId) {
-      return function() {
-        $mdSidenav(componentId).toggle();
-      };
-    }
-
-
-///////////////////////////////////
+//==============================webrtc
 
 'use strict';
 
@@ -91,7 +64,7 @@ var sdpConstraints = {
 
 /////////////////////////////////////////////
 
-var room = 'boobs';
+var room = 'bitchez';
 // Could prompt for room name:
 // room = socket.id;
 
@@ -160,9 +133,9 @@ socket.on('message', function(message) {
 ////////////////////////////////////////////////////
 var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
-// var hangupButton = document.getElementById('hangupButton')
-this.showVideo = false;
-// hangupButton.onclick = hangup;
+var hangupButton = document.getElementById('hangupButton')
+// this.showVideo = false;
+hangupButton.onclick = hangup;
 
 // this.start = function(){
 //   console.log(remoteStream.getVideoTracks()[0])
@@ -178,11 +151,11 @@ navigator.mediaDevices.getUserMedia({
 });
 
 
-this.stop=function(){
-  this.showVideo = true;
-  localStream.getVideoTracks()[0].stop()
-  remoteStream.getVideoTracks()[0].stop()
-}
+// this.stop=function(){
+//   this.showVideo = true;
+//   localStream.getVideoTracks()[0].stop()
+//   remoteStream.getVideoTracks()[0].stop()
+// }
 
 function gotStream(stream) {
   console.log('Adding local stream.');
@@ -195,12 +168,7 @@ function gotStream(stream) {
 }
 
 var constraints = {
-  video: {
-    mandatory: {
-      maxWidth: 800,
-      maxHeight: 600
-    }
-  }
+  video: true
 };
 
 console.log('Getting user media with constraints', constraints);
@@ -432,10 +400,113 @@ function removeCN(sdpLines, mLineIndex) {
 }
 
 
+// var localStream, localPeerConnection, remotePeerConnection;
+
+// var localVideo = document.getElementById("localVideo");
+// var remoteVideo = document.getElementById("remoteVideo");
+
+// var startButton = document.getElementById("startButton");
+// var callButton = document.getElementById("callButton");
+// var hangupButton = document.getElementById("hangupButton");
+// startButton.disabled = false;
+// callButton.disabled = true;
+// hangupButton.disabled = true;
+// startButton.onclick = start;
+// callButton.onclick = call;
+// hangupButton.onclick = hangup;
+
+// function trace(text) {
+//   console.log((performance.now() / 1000).toFixed(3) + ": " + text);
+// }
+
+// function gotStream(stream){
+//   trace("Received local stream");
+//   localVideo.src = URL.createObjectURL(stream);
+//   localStream = stream;
+//   callButton.disabled = false;
+// }
+
+// function start() {
+//   trace("Requesting local stream");
+//   startButton.disabled = true;
+//   navigator.getUserMedia({audio:true, video:true}, gotStream,
+//     function(error) {
+//       trace("getUserMedia error: ", error);
+//     });
+// }
+
+// function call() {
+//   callButton.disabled = true;
+//   hangupButton.disabled = false;
+//   trace("Starting call");
 
 
-  }])
+//   if (localStream.getVideoTracks().length > 0) {
+//     trace('Using video device: ' + localStream.getVideoTracks()[0].label);
+//   }
+//   if (localStream.getAudioTracks().length > 0) {
+//     trace('Using audio device: ' + localStream.getAudioTracks()[0].label);
+//   }
 
-})();
+//   var servers = null;
 
+//   localPeerConnection = new RTCPeerConnection(servers);
+//   trace("Created local peer connection object localPeerConnection");
+//   localPeerConnection.onicecandidate = gotLocalIceCandidate;
 
+//   remotePeerConnection = new RTCPeerConnection(servers);
+//   trace("Created remote peer connection object remotePeerConnection");
+//   remotePeerConnection.onicecandidate = gotRemoteIceCandidate;
+//   remotePeerConnection.onaddstream = gotRemoteStream;
+
+//   localPeerConnection.addStream(localStream);
+//   trace("Added localStream to localPeerConnection");
+//   localPeerConnection.createOffer(gotLocalDescription,handleError);
+// }
+
+// function gotLocalDescription(description){
+//   localPeerConnection.setLocalDescription(description);
+//   trace("Offer from localPeerConnection: \n" + description.sdp);
+//   remotePeerConnection.setRemoteDescription(description);
+//   remotePeerConnection.createAnswer(gotRemoteDescription,handleError);
+// }
+
+// function gotRemoteDescription(description){
+//   remotePeerConnection.setLocalDescription(description);
+//   trace("Answer from remotePeerConnection: \n" + description.sdp);
+//   localPeerConnection.setRemoteDescription(description);
+// }
+
+// function hangup() {
+//   trace("Ending call");
+//   localPeerConnection.close();
+//   remotePeerConnection.close();
+//   localPeerConnection = null;
+//   remotePeerConnection = null;
+//   hangupButton.disabled = true;
+//   callButton.disabled = false;
+// }
+
+// function gotRemoteStream(event){
+//   remoteVideo.src = URL.createObjectURL(event.stream);
+//   trace("Received remote stream");
+// }
+
+// function gotLocalIceCandidate(event){
+//   if (event.candidate) {
+//     remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+//     trace("Local ICE candidate: \n" + event.candidate.candidate);
+//   }
+// }
+
+// function gotRemoteIceCandidate(event){
+//   if (event.candidate) {
+//     localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+//     trace("Remote ICE candidate: \n " + event.candidate.candidate);
+//   }
+// }
+
+// function handleError(){}
+
+  })
+})()

@@ -91,6 +91,12 @@
           controller: 'questionAnsweredEntryCtrl',
           controllerAs: 'ctrl'
         })
+        .state('webRTC', {
+          url: '/chatPage/webRTC',
+          templateUrl: 'public/components/templates/webRTC.html',
+          controller: 'webRTCController',
+          controllerAs: 'ctrl'
+        })
 
 
     }])

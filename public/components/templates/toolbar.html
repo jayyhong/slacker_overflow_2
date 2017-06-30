@@ -41,8 +41,9 @@
 
       <md-button
         aria-label="Profile"
-        ui-sref="chatPage"
-        ng-if="toolbarCtrl.auth.isAuthenticated">
+        ng-click='toolbarCtrl.openWindow()'
+       
+        >
         Chat
       </md-button>
 
