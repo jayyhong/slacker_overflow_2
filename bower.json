@@ -1,0 +1,25 @@
+{
+  "name": "slack-overflow",
+  "description": "slack-overflow",
+  "main": "index.js",
+  "authors": [
+    "slack-overflow team: Josh Bahr",
+    "Inseok Seo",
+    "Jason Shao"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/michaelhappycheng/slacker_overflow_2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "angular-ui-ace": "^0.2.3"
+  },
+  "dependencies": {
+    "angular-ui-ace": "bower"
+  }
+}

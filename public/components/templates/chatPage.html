@@ -49,6 +49,20 @@
 
   </section>
 
+      <div id="videoPlayer">
+        <video style="height: 100px; position: absolute" ng-hide='ctrl.showVideo' id="localVideo" autoplay ng-hide='ctrl.showVideo'></video>
+        <video style="height: 300px"id="remoteVideo" autoplay></video>
+        <button id="startButton" ng-click='ctrl.start()'>Start</button>
+        <button id="stopButton" ng-click='ctrl.stop()'>stop</button>
+        <!--<button id="hangupButton">Hang Up</button>-->
+      </div>
+
+<div>
+<img src="http://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu">
+  <BR><h3>
+  Wallet Address: </h3> <h4>n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu<h4><br>
+  <div id='websocket'>Monitoring...</div>
+  </div>
 
   <md-content> 
   <span>beta v0.0.01</span>
@@ -57,11 +71,27 @@
       <strong>{{message.from}}: </strong> <span> {{message.message}} </span>
     </li>
   </ui>
-
-
   </md-content>
+
+  <section>
+  <div ui-ace="{
+    useWrapMode : true,
+    showGutter: true,
+    theme:'twilight',
+    mode: 'xml',
+    firstLineNumber: 1,
+    onLoad: aceLoaded,
+    onChange: aceChanged
+  }"
+    ng-keyUp="userInput()" style="height:200px" ng-model="aceModel"></div>
+  </section>
   
   <input ng-model="ctrl.newMessage" type="text"> <button ng-click="ctrl.sendMessage()">send</button>
-
+  <!--<button
+        aria-label="Video"
+        ng-click='ctrl.videoChat()'
+        >
+        VideoChat
+      </button>-->
 
 </div>

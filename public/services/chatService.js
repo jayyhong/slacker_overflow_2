@@ -4,11 +4,28 @@
     .module('slackOverflowApp')
     .service('chatService', ['$rootScope', function($rootScope) {
       const vm = this;
-      vm.socket = window.io('localhost:3456/');
+      vm.socket = window.io('https://morning-lowlands-81835.herokuapp.com');
+      // vm.socket = window.io('http://localhost:3456/')
       vm.users = [];
       vm.email;
       vm.messages = {};
       
+      vm.editor={};
+      vm.e = null;
+
+      vm.codeToServer = (editObj) =>{
+        console.log("in codeToServer", editObj);
+        vm.socket.emit('updateEditor', editObj);
+      }
+      vm.setEditor = (editor) => {
+        vm.editor = editor;
+      };
+      vm.socket.on('updateEditor', function(editObj){
+        console.log('from server: ' + editObj);
+        editObj = JSON.parse(editObj);
+        vm.editor.lastAppliedChange = editObj;
+        vm.editor.getSession().getDocument().applyDeltas([editObj]);
+      });
 
 
       vm.joinChatServer = (email) => {
@@ -42,22 +59,45 @@
         vm.socket.emit('newMessage', messageBody);
       }
 
-      // vm.updateUsers = () => {
-      //   vm.socket.on('users', function(data) {
-      //     if (vm.users.length === 0) {
-      //       vm.users.push(data[0]);
-      //     }
-      //     for (var i = 0; i < data.length; i++) {
-      //       for (var j = 0; j < vm.users.length; j++) {
-      //         if (data[i] !== vm.users[j]) {
-      //           vm.users.push(data[i]);
-      //         }
-      //       }
-      //     }
-      //   });
-      // };
+      vm.updateUsers = () => {
+        vm.socket.on('users', function(data) {
+          if (vm.users.length === 0) {
+            vm.users.push(data[0]);
+          }
+          for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < vm.users.length; j++) {
+              if (data[i] !== vm.users[j]) {
+                vm.users.push(data[i]);
+              }
+            }
+          }
+        });
+      };
 
+////////////////////////////////////////////////////////////////////////////////////
 
+ let ws = new WebSocket("wss://socket.blockcypher.com/v1/btc/test3");
+
+  ws.onopen = function(event) {
+    ws.send(JSON.stringify({event: "tx-confirmation", address: "n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu"}));
+  }
+
+  ws.onmessage = function (event) {
+    console.log('this si the events.data', event.data);
+    let tx = JSON.parse(event.data);
+    console.log('this is the tx', tx);
+    let getOuts = tx.outputs;
+    let addrs = 'n33UrA2MzaxvBUYjnXME7N2YC5toKPLsYu';
+    for (let i = 0; i < getOuts.length; i++) {
+      let outAdd = tx.outputs[i];
+        if(outAdd.addresses[0] === addrs) {
+        let amount = outAdd.value;
+        // console.log('this is the amoutn', amount);
+        let total = amount / 100000000;
+        document.getElementById('websocket').innerHTML = "<pre>" + '<h3>' + 'Latest Donation Received: ' +  + total + ' BTC' + '\n\n' + 'Transaction Hash: ' + tx.hash + '</h3>' + "<pre>";
+      }
+    }
+}
 
     }])
 })(window, window.angular);

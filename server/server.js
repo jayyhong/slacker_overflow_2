@@ -24,6 +24,11 @@ const users = {};
 io.on('connection', function(socket) {
   console.log('CHAT SERVER CONNECTION SUCCESSFUL');
 
+  socket.on('updateEditor', function(edit){
+    console.log("in updateEditor", edit)  
+    socket.broadcast.emit('updateEditor', edit);
+  });
+
   socket.on('join', function(email, callback) {
     console.log('USER JOINED, email: ', email);
     socket.email = email;
@@ -56,10 +61,54 @@ io.on('connection', function(socket) {
     io.sockets.emit('users', Object.keys(users));
   }
 
+  function log() {
+    var array = ['Message from server:'];
+    array.push.apply(array, arguments);
+    socket.emit('log', array);
+  }
+
+  socket.on('message', function(message) {
+    log('Client said: ', message);
+    // for a real app, would be room-only (not broadcast)
+    socket.broadcast.emit('message', message);
+  });
+
+  socket.on('create or join', function(room) {
+    log('Received request to create or join room ' + room);
+    
+    var numClients = io.engine.clientsCount;
+    log('Room ' + room + ' now has ' + numClients + ' client(s)');
+    if (numClients === 2) {
+      socket.join(room);
+      log('Client ID ' + socket.id + ' created room ' + room);
+      socket.emit('created', room, socket.id);
+
+    } else if (numClients <= 6) {
+      log('Client ID ' + socket.id + ' joined room ' + room);
+      io.sockets.in(room).emit('join', room);
+      socket.join(room);
+      socket.emit('joined', room, socket.id);
+      io.sockets.in(room).emit('ready');
+    } else { // max two clients
+      socket.emit('full', room);
+    }
+  });
+
+  socket.on('ipaddr', function() {
+    var ifaces = os.networkInterfaces();
+    for (var dev in ifaces) {
+      ifaces[dev].forEach(function(details) {
+        if (details.family === 'IPv4' && details.address !== '127.0.0.1') {
+          socket.emit('ipaddr', details.address);
+        }
+      });
+    }
+  });
+
 });
 
 init()
   .then(() => {
-    server.listen(port, () => console.log(`app is listening on port ${port}`));
+    server.listen(process.env.PORT || port, () => console.log(`app is listening on port ${port}`));
   })
   .catch(err => console.error('unable to connect to database ', err));
