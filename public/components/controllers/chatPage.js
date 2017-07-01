@@ -179,9 +179,18 @@ socket.on('message', (message) => {
 ////////////////////////////////////////////////////
 var localVideo = document.querySelector('#localVideo');
 var remoteVideo = document.querySelector('#remoteVideo');
-var showVideo = true;
+this.showVideo = true;
+this.payShow = true;
 // var hangupButton = document.getElementById('hangupButton')
 // hangupButton.onclick = hangup;
+
+this.showPayment = () => {
+  if (this.payShow === true) {
+    this.payShow = false
+  } else {
+    this.payShow = true
+  }
+}
 
 this.start = () => {
   console.log('yessssssssssssssssssss', pc)
