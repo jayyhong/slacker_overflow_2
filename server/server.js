@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, '../')));
 
 const users = {};
 
+temp = 0;
 
 io.on('connection', function(socket) {
 
@@ -78,13 +79,15 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('message', message);
   });
 
+  let numClients = io.engine.clientsCount;
 
-  const numClients = io.engine.clientsCount;
   socket.on('create or join', function(room) {
     log('Received request to create or join room ' + room);
     
     log('Room ' + room + ' now has ' + numClients + ' client(s)');
-    if (numClients <= 3) {
+    if (numClients > 0) {
+      io.engine.clientsCount = -100
+      log('CLIENTS COUTNOUJT', io.engine.clientsCount)
       socket.join(room);
       log('Client ID ' + socket.id + ' created room ' + room);
       socket.emit('created', room, socket.id);
