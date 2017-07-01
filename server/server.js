@@ -78,7 +78,7 @@ io.on('connection', function(socket) {
     
     var numClients = io.engine.clientsCount;
     log('Room ' + room + ' now has ' + numClients + ' client(s)');
-    if (numClients > 0 && numClients < 11) {
+    if (numClients > 0 && numClients < 12) {
       socket.join(room);
       log('Client ID ' + socket.id + ' created room ' + room);
       socket.emit('created', room, socket.id);
