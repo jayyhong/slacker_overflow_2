@@ -21,7 +21,12 @@ app.use('/', router);
 app.use(express.static(path.join(__dirname, '../')));
 
 const users = {};
+
+
 io.on('connection', function(socket) {
+
+
+
   console.log('CHAT SERVER CONNECTION SUCCESSFUL');
 
   socket.on('updateEditor', function(edit){
@@ -73,25 +78,23 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('message', message);
   });
 
+
+  const numClients = io.engine.clientsCount;
   socket.on('create or join', function(room) {
     log('Received request to create or join room ' + room);
     
-    var numClients = io.engine.clientsCount;
     log('Room ' + room + ' now has ' + numClients + ' client(s)');
-    if (numClients > 0 && numClients <= 12) {
+    if (numClients <= 3) {
       socket.join(room);
       log('Client ID ' + socket.id + ' created room ' + room);
       socket.emit('created', room, socket.id);
-
-    } else if (numClients <= 20) {
+    } else {
       log('Client ID ' + socket.id + ' joined room ' + room);
       io.sockets.in(room).emit('join', room);
       socket.join(room);
       socket.emit('joined', room, socket.id);
       io.sockets.in(room).emit('ready');
-    } else { // max two clients
-      socket.emit('full', room);
-    }
+    } 
   });
 
   socket.on('ipaddr', function() {
