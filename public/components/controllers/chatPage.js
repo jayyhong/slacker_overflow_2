@@ -108,7 +108,7 @@ var sdpConstraints = {
 
 /////////////////////////////////////////////
 
-var room = 'boobs';
+var room = 'penis';
 // Could prompt for room name:
 // room = socket.id;
 
